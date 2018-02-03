@@ -24,6 +24,13 @@ namespace aplimat_labs.Models
             this.z = z;
         }
 
+        public Vector3(double _x, double _y, double _z)
+        {
+            this.x = (float)_x;
+            this.y = (float)_y;
+            this.z = (float)_z;
+        }
+
         public static Vector3 operator +(Vector3 left, Vector3 right)
         {
             return new Vector3(left.x + right.x, left.y + right.y, left.z + right.z);
