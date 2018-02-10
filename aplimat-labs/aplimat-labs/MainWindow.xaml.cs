@@ -27,13 +27,13 @@ namespace aplimat_labs
         private const float GRAPH_LIMIT = 15;
         private const int TOTAL_CIRCLE_ANGLE = 360;
 
-        private Vector3 a = new Vector3(15,15,0);
-        private Vector3 b = new Vector3(-2,10,0);
+        //private Vector3 a = new Vector3(15,15,0);
+        //private Vector3 b = new Vector3(-2,10,0);
 
-        private const int HEADS = 0;
+        /*private const int HEADS = 0;
         private const int TAILS = 1;
 
-        private Randomizer rng = new Randomizer(-20, 20);
+        private Randomizer rng = new Randomizer(-20, 20);*/
 
         //private List<CubeMesh> myCubes = new List<CubeMesh>();
 
@@ -41,6 +41,9 @@ namespace aplimat_labs
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+
+           
+            //Console.WriteLine(myVector.GetMagnitude());
 
             /*Vector3 c = a + b;
             Console.WriteLine("Values: x: " + c.x + " y: " + c.y + " z: " + c.z);
@@ -53,12 +56,17 @@ namespace aplimat_labs
 
         private CubeMesh myCube = new CubeMesh();
         private Vector3 velocity = new Vector3(1, 1, 0);
-
+        private float speed = 2.0f;
+        private Vector3 myVector = new Vector3();
+        private Vector3 a = new Vector3();
+        private Vector3 b = new Vector3(5, 10, 0);
 
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             OpenGL gl = args.OpenGL;
             this.Title = "Vectors";
+
+            myVector = a - b;
 
             //Clear the Screen and the Depth Buffer
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -67,10 +75,26 @@ namespace aplimat_labs
             gl.LoadIdentity();
             gl.Translate(0.0f, 0.0f, -40.0f);
 
-            myCube.Draw(gl);
-            myCube.Position += velocity;
+            //myCube.Draw(gl);
+            //myCube.Position += velocity / speed;
 
-            //Right side bounce
+            gl.Color(1.0f, 0.0f, 0.0f);
+            gl.LineWidth(20);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex(b.x, b.y);
+            gl.End();
+
+            gl.Color(1.0f, 1.0f, 1.0f);
+            gl.LineWidth(3);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(0, 0);
+            gl.Vertex(b.x, b.y);
+            gl.End();
+
+            gl.DrawText(0, 0, 1, 1, 1, "Arial", 15, "Light saber magnitude is" + myVector.GetMagnitude());
+
+            /*//Right side bounce
             if (myCube.Position.x >= 30.0f)
             {
                 velocity.x = -1;
@@ -92,7 +116,7 @@ namespace aplimat_labs
             if (myCube.Position.y <= -20.0f)
             {
                 velocity.y = 1;
-            }
+            }*/
 
             /*CubeMesh myCube = new CubeMesh();
             myCube.Position = new Vector3(Gaussian.Generate(0, 15), rng.GenerateInt() , 0);
@@ -264,6 +288,19 @@ namespace aplimat_labs
             switch (e.Key)
             {
                 case Key.W:
+                    b.y++;
+                    break;
+
+                case Key.S:
+                    b.y--;
+                    break;
+
+                case Key.A:
+                    b.x--;
+                    break;
+
+                case Key.D:
+                    b.x++;
                     break;
             }
         } 
@@ -288,10 +325,8 @@ namespace aplimat_labs
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_AMBIENT, light0ambient);
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_DIFFUSE, light0diffuse);
             gl.Light(OpenGL.GL_LIGHT0, OpenGL.GL_SPECULAR, light0specular);
-            gl.Enable(OpenGL.GL_LIGHTING);
-            gl.Enable(OpenGL.GL_LIGHT0);
-
-            //gl.Disable(OpenGL.GL_LIGHTING);
+            gl.Disable(OpenGL.GL_LIGHTING);
+            gl.Disable(OpenGL.GL_LIGHT0);
 
             gl.ShadeModel(OpenGL.GL_SMOOTH);
 
@@ -304,5 +339,10 @@ namespace aplimat_labs
             gl.DrawText(x, y, 1, 1, 1, "Arial", 12, text);
         }
         #endregion
+
+        private void OpenGLControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point mousePos = e.GetPosition(this);
+        }
     }
 }
