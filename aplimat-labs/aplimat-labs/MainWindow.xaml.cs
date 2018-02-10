@@ -70,21 +70,25 @@ namespace aplimat_labs
             myCube.Draw(gl);
             myCube.Position += velocity;
 
+            //Right side bounce
             if (myCube.Position.x >= 30.0f)
             {
                 velocity.x = -1;
             }
 
+            //Left side bounce
             if (myCube.Position.x <= -30.0f)
             {
                 velocity.x = 1;
             }
 
+            //Top bounce
             if (myCube.Position.y >= 20.0f)
             {
                 velocity.y = -1;
             }
 
+            //Bottom bounce
             if (myCube.Position.y <= -20.0f)
             {
                 velocity.y = 1;
