@@ -35,7 +35,7 @@ namespace aplimat_labs
 
         private Randomizer rng = new Randomizer(-20, 20);
 
-        private List<CubeMesh> myCubes = new List<CubeMesh>();
+        //private List<CubeMesh> myCubes = new List<CubeMesh>();
 
         public MainWindow()
         {
@@ -49,17 +49,48 @@ namespace aplimat_labs
             Console.WriteLine("Values: x: " + d.x + " y: " + d.y + " z: " + d.z);*/
         }
 
-        private CubeMesh myCube = new CubeMesh(2, 1, 0);
+        //private CubeMesh myCube = new CubeMesh(2, 1, 0);
+
+        private CubeMesh myCube = new CubeMesh();
+        private Vector3 velocity = new Vector3(1, 1, 0);
+
 
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             OpenGL gl = args.OpenGL;
+            this.Title = "Vectors";
+
+            //Clear the Screen and the Depth Buffer
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+
+            //Move left and into the scren.
             gl.LoadIdentity();
+            gl.Translate(0.0f, 0.0f, -40.0f);
 
-            gl.Translate(0.0f, 0.0f, -100.0f);
+            myCube.Draw(gl);
+            myCube.Position += velocity;
 
-            CubeMesh myCube = new CubeMesh();
+            if (myCube.Position.x >= 30.0f)
+            {
+                velocity.x = -1;
+            }
+
+            if (myCube.Position.x <= -30.0f)
+            {
+                velocity.x = 1;
+            }
+
+            if (myCube.Position.y >= 20.0f)
+            {
+                velocity.y = -1;
+            }
+
+            if (myCube.Position.y <= -20.0f)
+            {
+                velocity.y = 1;
+            }
+
+            /*CubeMesh myCube = new CubeMesh();
             myCube.Position = new Vector3(Gaussian.Generate(0, 15), rng.GenerateInt() , 0);
             myCubes.Add(myCube);
 
@@ -67,7 +98,7 @@ namespace aplimat_labs
             {
                 cube.ColorChange();
                 cube.Draw(gl);
-            }
+            }*/
 
             /*myCube.Draw(gl);
 
@@ -106,7 +137,7 @@ namespace aplimat_labs
                     break;
             }*/
 
-            
+
 
             //gl.Color(0, 1, 0);
             //DrawCartesianPlane(gl); //draw cartesian plane with unit lines
@@ -256,7 +287,7 @@ namespace aplimat_labs
             gl.Enable(OpenGL.GL_LIGHTING);
             gl.Enable(OpenGL.GL_LIGHT0);
 
-            gl.Disable(OpenGL.GL_LIGHTING);
+            //gl.Disable(OpenGL.GL_LIGHTING);
 
             gl.ShadeModel(OpenGL.GL_SMOOTH);
 
