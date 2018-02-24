@@ -55,5 +55,15 @@ namespace aplimat_labs.Models
         {
             return (float)Math.Sqrt((x * x) + (y * y) + (z * z));
         }
+
+        public Vector3 Normalize()
+        {
+            float Length = GetMagnitude();
+            if (this.x != 0) this.x /= Length;
+            if (this.y != 0) this.y /= Length;
+            if (this.z != 0) this.z /= Length;
+
+            return new Vector3(x, y, z);
+        }
     }
 }

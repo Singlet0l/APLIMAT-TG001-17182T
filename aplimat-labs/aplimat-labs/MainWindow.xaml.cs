@@ -27,6 +27,7 @@ namespace aplimat_labs
         private const float GRAPH_LIMIT = 15;
         private const int TOTAL_CIRCLE_ANGLE = 360;
 
+        #region OldCode/PreviousActivities
         //private Vector3 a = new Vector3(15,15,0);
         //private Vector3 b = new Vector3(-2,10,0);
 
@@ -36,13 +37,13 @@ namespace aplimat_labs
         private Randomizer rng = new Randomizer(-20, 20);*/
 
         //private List<CubeMesh> myCubes = new List<CubeMesh>();
-
+        #endregion
         public MainWindow()
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
-           
+            #region OldCode/PreviousActivities
             //Console.WriteLine(myVector.GetMagnitude());
 
             /*Vector3 c = a + b;
@@ -50,23 +51,45 @@ namespace aplimat_labs
 
             Vector3 d = a - b;
             Console.WriteLine("Values: x: " + d.x + " y: " + d.y + " z: " + d.z);*/
+            #endregion
         }
 
+        private CubeMesh LightCube = new CubeMesh()
+        {
+            Position = new Vector3(-25, 0, 0)
+        };
+
+        private CubeMesh MediumCube = new CubeMesh()
+        {
+            Position = new Vector3(-25, 0, 0),
+            Mass = 3
+        };
+
+        private CubeMesh HeavyCube = new CubeMesh()
+        {
+            Position = new Vector3(-25, 0, 0),
+            Mass = 5
+        };
+
+        private Vector3 Wind = new Vector3(0.01f, 0, 0);
+        private Vector3 Gravity = new Vector3(0, -0.01f, 0);
+        private Vector3 VerticalBounce = new Vector3(0, 0.3f, 0);
+        private Vector3 HorizontalBounce = new Vector3(-0.15f, 0, 0);
+
+        #region OldCode/PreviousActivities
         //private CubeMesh myCube = new CubeMesh(2, 1, 0);
 
-        private CubeMesh myCube = new CubeMesh();
+        /*private CubeMesh myCube = new CubeMesh();
         private Vector3 velocity = new Vector3(1, 1, 0);
         private float speed = 2.0f;
         private Vector3 myVector = new Vector3();
         private Vector3 a = new Vector3();
-        private Vector3 b = new Vector3(5, 10, 0);
-
+        private Vector3 b = new Vector3(5, 10, 0);*/
+#endregion
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             OpenGL gl = args.OpenGL;
-            this.Title = "Vectors";
-
-            myVector = a - b;
+            this.Title = "Bouncing Cubes";
 
             //Clear the Screen and the Depth Buffer
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -75,10 +98,51 @@ namespace aplimat_labs
             gl.LoadIdentity();
             gl.Translate(0.0f, 0.0f, -40.0f);
 
+            //LightCube Physics
+            gl.Color(1.0f, 0.0f, 0.0f);
+            LightCube.Draw(gl);
+            LightCube.ApplyForce(Wind);
+            LightCube.ApplyForce(Gravity);
+
+            if (LightCube.Position.x >= 25.0f)
+                LightCube.Velocity.x *= -1;
+               
+            if (LightCube.Position.y <= -10.0f)
+                LightCube.Velocity.y *= -1;
+
+            //MediumCube Physics
+            gl.Color(0.0f, 1.0f, 0.0f);
+            MediumCube.Draw(gl);
+            MediumCube.ApplyForce(Wind);
+            MediumCube.ApplyForce(Gravity);
+
+            if (MediumCube.Position.x >= 25.0f)
+                MediumCube.Velocity.x *= -1;
+
+            if (MediumCube.Position.y <= -10.0f)
+                MediumCube.Velocity.y *= -1;
+
+            //HeavyCube Physics
+            gl.Color(0.0f, 0.0f, 1.0f);
+            HeavyCube.Draw(gl);
+            HeavyCube.ApplyForce(Wind);
+            HeavyCube.ApplyForce(Gravity);
+
+            if (HeavyCube.Position.x >= 25.0f)
+                HeavyCube.Velocity.x *= -1;
+
+            if (HeavyCube.Position.y <= -10.0f)
+                HeavyCube.Velocity.y *= -1;
+
+            #region OldCode/PreviousActivities
+
+
+
+            //myVector = a - b;
             //myCube.Draw(gl);
             //myCube.Position += velocity / speed;
 
-            gl.Color(1.0f, 0.0f, 0.0f);
+            /*gl.Color(1.0f, 0.0f, 0.0f);
             gl.LineWidth(20);
             gl.Begin(OpenGL.GL_LINE_STRIP);
             gl.Vertex(0, 0);
@@ -92,7 +156,7 @@ namespace aplimat_labs
             gl.Vertex(b.x, b.y);
             gl.End();
 
-            gl.DrawText(0, 0, 1, 1, 1, "Arial", 15, "Light saber magnitude is" + myVector.GetMagnitude());
+            gl.DrawText(0, 0, 1, 1, 1, "Arial", 15, "Light saber magnitude is" + myVector.GetMagnitude());*/
 
             /*//Right side bounce
             if (myCube.Position.x >= 30.0f)
@@ -173,8 +237,9 @@ namespace aplimat_labs
             //DrawLinearFunction(gl);
             //DrawQuadraticFunction(gl);
             //DrawCircle(gl);
+            #endregion
         }
-        
+
 
         private void DrawCartesianPlane(OpenGL gl)
         {
@@ -285,7 +350,8 @@ namespace aplimat_labs
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            #region KeyboardCode
+            /*switch (e.Key)
             {
                 case Key.W:
                     b.y++;
@@ -302,7 +368,8 @@ namespace aplimat_labs
                 case Key.D:
                     b.x++;
                     break;
-            }
+            }*/
+#endregion
         } 
         #region opengl init
         private void OpenGLControl_OpenGLInitialized(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
